@@ -5,6 +5,11 @@ this is a very quick and dirty, poorly thought out spec for a config system
 to automate syncing custom configs / overrides for a given package on a system.
 this DOES NOT have anything to do with build systems, but the inspiration is from Arch PKGBUILD
 
+uses `rsync`
+
+name `tadyen` is just me, and i suck at naming. Since this is my desired solution compared to many many others' dotfiles, 
+it would make sense for me to call it me. If this actually takes off (haha fat chance) then it can be renamed/refactored.
+
 ## 1 Overview
 - these are `TOML` files and follow the toml spec
 - for specifivity of this function, they shall be strictly named `tadyen.toml`
@@ -43,19 +48,35 @@ Stuff described:
 # tadyen.toml
 # This is a comment.
 
-[tadyen_config]
+[tadyen]
 name = "nvim"
 longname = "neovim"
 
-[[tadyen_config.entry]]
+[[tadyen.entry]]
 from = "./.config"
 to = "$HOME/.config"
 match = "nvim"      # can use globbing, defaults to '*' to glob all contents in <from>
 sync = "duplex"
 
-[[tadyen_config.entry]]
+[[tadyen.entry]]
 from = "./.config"
 to = "/root/.config"
 sync = "master"     # can still be overwritten due to entry above
 
 ```
+
+## 4 Edge cases / discussion
+since this uses rsync, and file deletions do not have receipts without a VCS attached, there is no way of syncing delete operations.
+
+this can be UNSAFE when bi-directionally syncing.
+
+Also, VCS is IMPLIED MISSING since modifying configs on the fly and stuff does not engage a VCS, including system actions.
+
+Thus: TBD create a backup system with delete receipts. We can assume the deletion time is based on the most recent change in the files, as a safer estimate.
+
+Consider `foo: 1 day ago` and `bar: a few seconds ago`. If `bar` is rm'd, then the delete receipt for bar is created on the next sync as the following: 
+`bar.deleted: 1 day ago`. If the reflecting dir has a `bar: half day ago`, then the most recent of the two is picked, in this case, `bar: half day ago` even though the deletion was more recent.
+
+This is just a safety feature, because it is implied that the most recent dir that was worked on will have the most recent update, and flat-out deleting is NOT-CONSIDERED work (otherwise rm -rf will kill all).
+
+
