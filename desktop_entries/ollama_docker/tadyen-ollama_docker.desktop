@@ -3,6 +3,6 @@
 Name=Ollama Docker
 Comment=Opens an Ollama Docker container and enters interactive shell in it
 Type=Application
-Exec=/home/tadyen/Yokul/asdf-configs/desktop_files/ollama_docker/ollama_docker.sh
+Exec=/home/tadyen/Yokul/.dootfiles/desktop_entries/ollama_docker/ollama_docker.sh
 Terminal=true
-Icon=/home/tadyen/Yokul/asdf-configs/desktop_files/ollama_docker/ollama.png
+Icon=/home/tadyen/Yokul/.dootfiles/desktop_entries/ollama_docker/ollama.png
