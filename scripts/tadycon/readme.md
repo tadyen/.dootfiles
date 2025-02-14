@@ -1,9 +1,12 @@
-# tadyen_config
+# tadycon - tadyen's config
 this is a very quick and dirty, poorly thought out spec for a config system
 
 ## 0 Goal
 to automate syncing custom configs / overrides for a given package on a system.
 this DOES NOT have anything to do with build systems, but the inspiration is from Arch PKGBUILD
+it (may) expand to include package management to quickly bootstrap my workstation faik
+
+still subject to lots of change.
 
 uses `rsync`
 
@@ -12,7 +15,7 @@ it would make sense for me to call it me. If this actually takes off (haha fat c
 
 ## 1 Overview
 - these are `TOML` files and follow the toml spec
-- for specifivity of this function, they shall be strictly named `tadyen.toml`
+- for specifivity of this function, they shall be strictly named `tadyconf.toml`
 - only 1 or none of it can exist per dir
 - 1 file only applies to 1 application
 
@@ -45,20 +48,20 @@ Stuff described:
 ## 3 Example
 
 ``` toml
-# tadyen.toml
+# tadycon.toml
 # This is a comment.
 
-[tadyen]
+[tadycon]
 name = "nvim"
 longname = "neovim"
 
-[[tadyen.entry]]
+[[tadycon.entry]]
 from = "./.config"
 to = "$HOME/.config"
 match = "nvim"      # can use globbing, defaults to '*' to glob all contents in <from>
 sync = "duplex"
 
-[[tadyen.entry]]
+[[tadycon.entry]]
 from = "./.config"
 to = "/root/.config"
 sync = "master"     # can still be overwritten due to entry above
